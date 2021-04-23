@@ -43,7 +43,8 @@ dist_mtx.columns.values[0] = "idx"
 
 
 ## Plot
-ax = denver_tracts.plot(column='TTL_POPULA', cmap='PuRd', linewidth=0.8, edgecolor='black', figsize=(30, 18))
+#Nice pink: PuRd
+ax = denver_tracts.plot(column='TTL_POPULA', cmap='Blues', linewidth=0.8, edgecolor='black', figsize=(30, 18))
 x, y = serv_prov['Long'].values, serv_prov['Lat'].values
-ax.scatter(x,y, marker="o", color='b')
+ax.scatter(x,y, marker="o", color='r')
 plt.show()
