@@ -34,8 +34,8 @@ crs = {'init': 'epsg:3857'} # In meters
 serv_lat_long = gpd.GeoDataFrame(serv_prov, crs = crs, geometry = geometry)
 
 ## Calculate distances between service providers and Tract centers
-dist_mtx=serv_lat_long.geometry.apply(lambda x: centers.distance(x))
-dist_mtx = dist_mtx.idxmin(axis=1)
+dist_mtx_all = serv_lat_long.geometry.apply(lambda x: centers.distance(x))
+dist_mtx = dist_mtx_all.idxmin(axis=1)
 min_dist=serv_lat_long.geometry.apply(lambda x: centers.distance(x).min())
 dist_mtx=pd.concat([dist_mtx,min_dist],axis=1)
 dist_mtx = pd.DataFrame(dist_mtx)
@@ -48,3 +48,15 @@ ax = denver_tracts.plot(column='TTL_POPULA', cmap='Blues', linewidth=0.8, edgeco
 x, y = serv_prov['Long'].values, serv_prov['Lat'].values
 ax.scatter(x,y, marker="o", color='r')
 plt.show()
+
+## Condense data for AMPL execution
+
+cols_tract = ['STFID', 'STFID_NUM', 'TRACTCE10','GEO_NAME', 'TTL_POPULA','PCT_BLACK']
+tract_data = denver_tracts[cols_tract]
+cols_tract_name = tract_data.GEO_NAME
+rows_serviceprov_name = serv_prov.Name
+d_ij_matrix = dist_mtx_all.rename(columns = cols_tract_name, inplace = False)
+d_ij_matrix = d_ij_matrix.rename(index=rows_serviceprov_name)
+
+tract_data.to_csv('D:/Sandy Oaks/Documents/Grad School/S21_MATH-7594/Project/COVIDvaccineAllocationIP2021/tract_data.csv')
+d_ij_matrix.to_csv('D:/Sandy Oaks/Documents/Grad School/S21_MATH-7594/Project/COVIDvaccineAllocationIP2021/d_ij.csv')
