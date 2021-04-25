@@ -1,6 +1,6 @@
 #import os
 import pandas as pd
-#import numpy as np
+import numpy as np
 # Plotting packages
 import matplotlib.pyplot as plt
 #import matplotlib.lines as mlines
@@ -60,3 +60,21 @@ d_ij_matrix = d_ij_matrix.rename(index=rows_serviceprov_name)
 
 tract_data.to_csv('D:/Sandy Oaks/Documents/Grad School/S21_MATH-7594/Project/COVIDvaccineAllocationIP2021/tract_data.csv')
 d_ij_matrix.to_csv('D:/Sandy Oaks/Documents/Grad School/S21_MATH-7594/Project/COVIDvaccineAllocationIP2021/d_ij.csv')
+
+## Handle the d_ij multiplication
+d_ij_matrix2 = pd.read_csv('D:/Sandy Oaks/Documents/Grad School/S21_MATH-7594/Project/COVIDvaccineAllocationIP2021/d_ij.csv')
+idx_pharmacy = np.array([24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51])
+for count in d_ij_matrix.columns:
+    pct_black = denver_tracts[denver_tracts['GEO_NAME'] == count]['PCT_BLACK']
+    for count1 in idx_pharmacy:
+        new_val = d_ij_matrix2.loc[count1,count]*(1+int(pct_black))
+        d_ij_matrix2.loc[count1,count] = new_val
+#end
+
+d_ij_matrix2[count].iloc[[count1]].to_numpy()[0]*(1+int(pct_black))
+
+d_ij_matrix2[count].iloc[[0]].to_numpy()[0]*(1+int(pct_black)) #0.092444144
+#0.554664864
+
+d_ij_matrix2.loc[0,count]*(1+int(pct_black))
+#= 0.554664864
